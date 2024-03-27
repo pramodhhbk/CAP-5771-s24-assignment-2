@@ -27,8 +27,18 @@ Recall from lecture that agglomerative hierarchical clustering is a greedy itera
 # the question asked.
 
 
-def data_index_function():
-    return None
+def data_index_function(data,I,J):
+    min_distance = np.inf
+    
+    for i in I:
+        for j in J:
+            distance = np.linalg.norm(data[i] - data[j])  # Euclidean distance
+            if distance < min_distance:
+                min_distance = distance
+    
+    return min_distance
+
+    
 
 
 def compute():
@@ -39,29 +49,43 @@ def compute():
     """
 
     # return value of scipy.io.loadmat()
-    answers["3A: toy data"] = {}
+    data = io.loadmat("hierarchical_toy_data.mat")
+    #print(data)
+    answers["3A: toy data"] = data
 
     """
     B.	Create a linkage matrix Z, and plot a dendrogram using the scipy.hierarchy.linkage and scipy.hierachy.dendrogram functions, with “single” linkage.
     """
 
     # Answer: NDArray
-    answers["3B: linkage"] = np.zeros(1)
-
+    Z = linkage(data['X'],'single')
+    answers["3B: linkage"] = np.array(Z)
+    dendo = dendrogram(Z)
+    print("Z",Z)
+    # print("Dendo",dendo)
     # Answer: the return value of the dendogram function, dicitonary
-    answers["3B: dendogram"] = {}
-
+    answers["3B: dendogram"] = dendo
+    #print("Dendo",dendo)
+    plt.figure(figsize=(10, 6))
+    dendrogram(Z)
+    plt.title('Dendrogram')
+    plt.xlabel('Data points')
+    plt.ylabel('Distance')
+    plt.savefig('3B.jpg')
     """
     C.	Consider the merger of the cluster corresponding to points with index sets {I={8,2,13}} J={1,9}}. At what iteration (starting from 0) were these clusters merged? That is, what row does the merger of A correspond to in the linkage matrix Z? The rows count from 0. 
     """
 
     # Answer type: integer
+    
+    
     answers["3C: iteration"] = -1
 
     """
     D.	Write a function that takes the data and the two index sets {I,J} above, and returns the dissimilarity given by single link clustering using the Euclidian distance metric. The function should output the same value as the 3rd column of the row found in problem 2.C.
     """
     # Answer type: a function defined above
+    #print(data_index_function(data['X'], {8,2,13}, {1,9}))
     answers["3D: function"] = data_index_function
 
     """
