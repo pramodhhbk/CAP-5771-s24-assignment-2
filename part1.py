@@ -2,6 +2,7 @@ import myplots as myplt
 import time
 import warnings
 import numpy as np
+from sklearn.datasets import *
 import matplotlib.pyplot as plt
 from sklearn import cluster, datasets, mixture
 from sklearn.datasets import make_blobs
@@ -47,20 +48,20 @@ def compute():
     """
     n_samples = 100
     seed = 42
-    nc = datasets.make_circles(
+    nc = make_circles(
         n_samples=n_samples, factor=0.5, noise=0.05, random_state=seed
     )
-    nm = datasets.make_moons(n_samples=n_samples, noise=0.05, random_state=seed)
-    b = datasets.make_blobs(n_samples=n_samples, random_state=seed)
+    nm = make_moons(n_samples=n_samples, noise=0.05, random_state=seed)
+    b = make_blobs(n_samples=n_samples, random_state=seed)
     # Anisotropicly distributed data
     
-    X, y = datasets.make_blobs(n_samples=n_samples, random_state=seed)
+    X, y = make_blobs(n_samples=n_samples, random_state=seed)
     transformation = [[0.6, -0.6], [-0.4, 0.8]]
     X_aniso = np.dot(X, transformation)
     add = (X_aniso, y)
 
     # blobs with varied variances
-    bvv = datasets.make_blobs(
+    bvv = make_blobs(
         n_samples=n_samples, cluster_std=[1.0, 2.5, 0.5], random_state=seed
     )
     # Dictionary of 5 datasets. e.g., dct["nc"] = [data, labels]
