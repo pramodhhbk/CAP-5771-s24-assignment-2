@@ -9,7 +9,7 @@ from sklearn.preprocessing import StandardScaler
 from itertools import cycle, islice
 import scipy.io as io
 from scipy.cluster.hierarchy import dendrogram, linkage  #
-
+import myplots as myplt
 # import plotly.figure_factory as ff
 import math
 from sklearn.cluster import AgglomerativeClustering
@@ -26,11 +26,28 @@ In this task, you will explore hierarchical clustering over different datasets. 
 # Change the arguments and return according to 
 # the question asked. 
 
-def fit_hierarchical_cluster():
-    return None
+def fit_hierarchical_cluster(data,labels,link_type,k):
+    ss=StandardScaler()
+    ac = AgglomerativeClustering(n_clusters=k,linkage=link_type)
+    data = ss.fit_transform(data)
+    ac.fit(data,labels)
+    preds = ac.labels_
+    return preds
 
-def fit_modified():
-    return None
+def fit_modified(data,labels,link_type,k):
+    sc = StandardScaler()
+    data = sc.fit_transform(data)
+    Z = linkage(data,link_type)
+    print(Z)
+    calc_distance = []
+    for i in range(len(Z)-1):
+        calc_distance.append(Z[i+1][2]-Z[i][2])
+    ac = AgglomerativeClustering(n_clusters=None,linkage=link_type,distance_threshold=np.max(calc_distance))  
+    ac.fit(data,labels)
+    labels = ac.labels_
+    return labels
+   
+    
 
 
 def compute():
@@ -43,6 +60,32 @@ def compute():
     # Dictionary of 5 datasets. e.g., dct["nc"] = [data, labels]
     # keys: 'nc', 'nm', 'bvv', 'add', 'b' (abbreviated datasets)
     dct = answers["4A: datasets"] = {}
+    n_samples = 100
+    seed = 42
+    nc = datasets.make_circles(
+        n_samples=n_samples, factor=0.5, noise=0.05, random_state=seed
+    )
+    nm = datasets.make_moons(n_samples=n_samples, noise=0.05, random_state=seed)
+    b = datasets.make_blobs(n_samples=n_samples, random_state=seed)
+    # Anisotropicly distributed data
+    
+    X, y = datasets.make_blobs(n_samples=n_samples, random_state=seed)
+    transformation = [[0.6, -0.6], [-0.4, 0.8]]
+    X_aniso = np.dot(X, transformation)
+    add = (X_aniso, y)
+
+    # blobs with varied variances
+    bvv = datasets.make_blobs(
+        n_samples=n_samples, cluster_std=[1.0, 2.5, 0.5], random_state=seed
+    )
+    # Dictionary of 5 datasets. e.g., dct["nc"] = [data, labels]
+    # 'nc', 'nm', 'bvv', 'add', 'b'. keys: 'nc', 'nm', 'bvv', 'add', 'b' (abbreviated datasets)
+    dct = answers["4A: datasets"] = {}
+    dct["nc"] = [nc[0],nc[1]]
+    dct["nm"] = [nm[0],nm[1]]
+    dct["bvv"] = [bvv[0],bvv[1]]
+    dct["add"] = [add[0],add[1]]
+    dct["b"] = [b[0],b[1]]
 
     # dct value:  the `fit_hierarchical_cluster` function
     dct = answers["4A: fit_hierarchical_cluster"] = fit_hierarchical_cluster
@@ -52,6 +95,17 @@ def compute():
 
     Create a pdf of the plots and return in your report. 
     """
+    ac_value={}
+    for dataset_name in answers["4A: datasets"].keys():
+        dataset_cluster={}
+        lst =[]
+        for cluster_type in ['single','complete','ward','average']:
+            preds=dct(answers["4A: datasets"][dataset_name][0],answers["4A: datasets"][dataset_name][1],cluster_type,2)
+            dataset_cluster[cluster_type]=preds
+        lst.append((answers["4A: datasets"][dataset_name][0],answers["4A: datasets"][dataset_name][1]))
+        lst.append(dataset_cluster)
+        ac_value[dataset_name]=lst
+    myplt.plot_part1C(ac_value,'Part4_B.jpg')
 
     # dct value: list of dataset abbreviations (see 1.C)
     dct = answers["4B: cluster successes"] = [""]
@@ -64,8 +118,19 @@ def compute():
 
     # dct is the function described above in 4.C
     dct = answers["4A: modified function"] = fit_modified
+    ac_value={}
+    for dataset_name in answers["4A: datasets"].keys():
+        dataset_cluster={}
+        lst =[]
+        for cluster_type in ['single','complete','ward','average']:
+            preds=fit_modified(answers["4A: datasets"][dataset_name][0],answers["4A: datasets"][dataset_name][1],cluster_type,2)
+            dataset_cluster[cluster_type]=preds
+        lst.append((answers["4A: datasets"][dataset_name][0],answers["4A: datasets"][dataset_name][1]))
+        lst.append(dataset_cluster)
+        ac_value[dataset_name]=lst
+    myplt.plot_part1C(ac_value,'Part4_C.jpg')
 
-    return answers
+    return None
 
 
 # ----------------------------------------------------------------------
