@@ -88,7 +88,7 @@ def compute():
 
     # dct value: a list of tuples, e.g., [[0, 100.], [1, 200.]]
     # Each tuple is a (k, SSE) pair
-    dct = answers["2C: SSE plot"] = [(index, value) for index, value in enumerate(sse_B)]
+    dct = answers["2C: SSE plot"] = [[index, value] for index, value in enumerate(sse_B)]
     plt.figure(figsize=(10, 6))
     plt.plot([1,2,3,4,5,6,7,8], sse_B, marker='o', linestyle='-')
     plt.title('K Value vs SSE')
@@ -103,7 +103,7 @@ def compute():
     """
 
     # dct value has the same structure as in 2C
-    dct = answers["2D: inertia plot"] = [(index, value) for index, value in enumerate(sse_D)]
+    dct = answers["2D: inertia plot"] = [[index, value] for index, value in enumerate(sse_D)]
     plt.figure(figsize=(10, 6))
     plt.plot([1,2,3,4,5,6,7,8], sse_D, marker='o', linestyle='-')
     plt.title('K Value vs SSE(Inertia)')
