@@ -130,7 +130,7 @@ def compute():
         ac_value[dataset_name]=lst
     myplt.plot_part1C(ac_value,'Part4_C.jpg')
 
-    return None
+    return answers
 
 
 # ----------------------------------------------------------------------
