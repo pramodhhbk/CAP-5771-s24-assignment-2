@@ -117,7 +117,7 @@ def compute():
     """
 
     # dct is the function described above in 4.C
-    dct = answers["4A: modified function"] = fit_modified
+    dct = answers["4C: modified function"] = fit_modified
     ac_value={}
     for dataset_name in answers["4A: datasets"].keys():
         dataset_cluster={}
