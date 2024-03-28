@@ -104,7 +104,7 @@ def compute():
     myplt.plot_part1C(Kmeans_value,'Part1_C.jpg')
 
 
-    dct = answers["1C: cluster successes"] = {"xy": [3,4], "zx": [2]} 
+    dct = answers["1C: cluster successes"] = {"bvv": [3,4], "b": [2]} 
 
     # dct value: return a list of 0 or more dataset abbreviations (list has zero or more elements, 
     # which are abbreviated dataset names as strings)
