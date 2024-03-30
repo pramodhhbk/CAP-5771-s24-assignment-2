@@ -61,7 +61,7 @@ def compute():
     Z = linkage(data['X'],'single')
     answers["3B: linkage"] = np.array(Z)
     dendo = dendrogram(Z)
-    print("Z",Z)
+    #print("Z",Z)
     # print("Dendo",dendo)
     # Answer: the return value of the dendogram function, dicitonary
     answers["3B: dendogram"] = dendo
@@ -79,7 +79,7 @@ def compute():
     # Answer type: integer
     
     
-    answers["3C: iteration"] = -1
+    answers["3C: iteration"] = 4
 
     """
     D.	Write a function that takes the data and the two index sets {I,J} above, and returns the dissimilarity given by single link clustering using the Euclidian distance metric. The function should output the same value as the 3rd column of the row found in problem 2.C.
@@ -94,14 +94,20 @@ def compute():
     """
 
     # List the clusters. the [{0,1,2}, {3,4}, {5}, {6}, ...] represents a list of lists.
-    answers["3E: clusters"] = [{0, 0}, {0, 0}]
+    answers["3E: clusters"] = [{0, 0}, {0, 0}] ## Should be list of lists
 
     """
     F.	Single linked clustering is often criticized as producing clusters where “the rich get richer”, that is, where one cluster is continuously merging with all available points. Does your dendrogram illustrate this phenomenon?
     """
 
     # Answer type: string. Insert your explanation as a string.
-    answers["3F: rich get richer"] = ""
+    answers["3F: rich get richer"] = "As we get closer to the starting point, it looks like the groups of points are coming together, kind of like they're joining up to become one big group made up of points that are nearby each other"
+
+
+
+
+
+
 
     return answers
 
