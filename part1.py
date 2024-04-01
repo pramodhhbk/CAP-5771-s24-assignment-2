@@ -20,6 +20,7 @@ import pickle
 import utils as u
 
 
+
 # ----------------------------------------------------------------------
 """
 Part 1: 
@@ -39,6 +40,13 @@ def fit_kmeans(data,label,n_cluster,seed=42):
     prediction = kmeans.predict(data_transform)
     return prediction
 
+def fit_kmeans_D(data,label,n_cluster):
+    kmeans = KMeans(n_clusters=n_cluster,init='random')
+    scaling = StandardScaler()
+    data_transform = scaling.fit_transform(data)
+    kmeans.fit(data_transform,label)
+    prediction = kmeans.predict(data_transform)
+    return prediction
 
 def compute():
     answers = {}
@@ -96,15 +104,17 @@ def compute():
         dataset_cluster={}
         lst =[]
         for num_cluster in [2,3,5,10]:
-            preds=dct(answers['1A: datasets'][dataset_name][0],answers['1A: datasets'][dataset_name][1],num_cluster,42)
+            preds=fit_kmeans(answers['1A: datasets'][dataset_name][0],answers['1A: datasets'][dataset_name][1],num_cluster,42)
             dataset_cluster[num_cluster]=preds
         lst.append((answers['1A: datasets'][dataset_name][0],answers['1A: datasets'][dataset_name][1]))
         lst.append(dataset_cluster)
         Kmeans_value[dataset_name]=lst
     myplt.plot_part1C(Kmeans_value,'Part1_C.jpg')
 
+    
 
-    dct = answers["1C: cluster successes"] = {"bvv": [2,3], "b": [2,3],"add":[2,3]} 
+
+    dct = answers["1C: cluster successes"] = {"bvv": [3], "b": [3],"add":[3]} 
 
     # dct value: return a list of 0 or more dataset abbreviations (list has zero or more elements, 
     # which are abbreviated dataset names as strings)
@@ -115,22 +125,25 @@ def compute():
 
     Create a pdf of the plots and return in your report. 
     """
-    Kmeans_value={}
-    for dataset_name in answers['1A: datasets'].keys():
-        dataset_cluster={}
-        lst =[]
-        for num_cluster in [2,3]:
-            preds=fit_kmeans(answers['1A: datasets'][dataset_name][0],answers['1A: datasets'][dataset_name][1],num_cluster,42)
-            dataset_cluster[num_cluster]=preds
-        lst.append((answers['1A: datasets'][dataset_name][0],answers['1A: datasets'][dataset_name][1]))
-        lst.append(dataset_cluster)
-        Kmeans_value[dataset_name]=lst
-    myplt.plot_part1C(Kmeans_value,'Part1_D.jpg')
+    for i in range(5):
+
+        Kmeans_value={}
+        for dataset_name in answers['1A: datasets'].keys():
+            dataset_cluster={}
+            lst =[]
+            for num_cluster in [2,3]:
+                preds=fit_kmeans_D(answers['1A: datasets'][dataset_name][0],answers['1A: datasets'][dataset_name][1],num_cluster)
+                dataset_cluster[num_cluster]=preds
+            lst.append((answers['1A: datasets'][dataset_name][0],answers['1A: datasets'][dataset_name][1]))
+            lst.append(dataset_cluster)
+            Kmeans_value[dataset_name]=lst
+        myplt.plot_part1C(Kmeans_value,f'Part1_D_{i}.jpg')
+    
 
     # dct value: list of dataset abbreviations
     # Look at your plots, and return your answers.
     # The plot is part of your report, a pdf file name "report.pdf", in your repository.
-    dct = answers["1D: datasets sensitive to initialization"] = [""]
+    dct = answers["1D: datasets sensitive to initialization"] = ["nc"]
     
     return answers
 
